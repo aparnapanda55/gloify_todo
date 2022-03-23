@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'capture_task.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,29 +40,71 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const TextField(
-                    decoration: InputDecoration(hintText: 'Enter task'),
-                  ),
-                  actions: [
-                    ElevatedButton(onPressed: () {}, child: const Text('Save'))
-                  ],
-                );
-              });
+        onPressed: () async {
+          final todo = await showDialog<String>(
+            context: context,
+            builder: (context) => const CreateTodoDialog(),
+          );
+          print(todo);
         },
         child: const Icon(Icons.add),
       ),
-      body: const DayWiseTask(),
+      body: const TaskLists(),
     );
   }
 }
 
-class DayWiseTask extends StatelessWidget {
-  const DayWiseTask({
+class CreateTodoDialog extends StatefulWidget {
+  const CreateTodoDialog({Key? key}) : super(key: key);
+
+  @override
+  State<CreateTodoDialog> createState() => _CreateTodoDialogState();
+}
+
+class _CreateTodoDialogState extends State<CreateTodoDialog> {
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Task'),
+      content: TextField(
+        controller: controller,
+        decoration: const InputDecoration(hintText: 'Enter task'),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            final todo = controller.text.trim();
+            Navigator.of(context).pop(todo);
+          },
+          child: const Text('Save'),
+        ),
+      ],
+    );
+  }
+}
+
+class TaskLists extends StatelessWidget {
+  const TaskLists({
     Key? key,
   }) : super(key: key);
 

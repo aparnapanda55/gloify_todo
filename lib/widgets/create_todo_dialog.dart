@@ -41,34 +41,12 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
           Row(
             children: [
               ElevatedButton(
-                onPressed: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDate,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2025),
-                  );
-                  setState(() {
-                    if (date != null) {
-                      selectedDate = date;
-                    }
-                  });
-                },
-                child: Text('$selectedDate'.split(' ')[0]),
+                onPressed: selectDate,
+                child: DatePreview(selectedDate: selectedDate),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  final time = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime,
-                  );
-                  setState(() {
-                    if (time != null) {
-                      selectedTime = time;
-                    }
-                  });
-                },
-                child: Text('$selectedTime'),
+                onPressed: selectTime,
+                child: TimePreview(selectedTime: selectedTime),
               ),
             ],
           )
@@ -76,29 +54,86 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
       ),
       actions: [
         ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: cancel,
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: () {
-            final text = controller.text.trim();
-            if (text.isEmpty) return;
-
-            final date = DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              selectedTime.hour,
-              selectedTime.minute,
-            );
-
-            Navigator.of(context).pop(NewTodo(text: text, date: date));
-          },
+          onPressed: createTodo,
           child: const Text('Save'),
         ),
       ],
     );
+  }
+
+  void cancel() {
+    Navigator.of(context).pop();
+  }
+
+  void createTodo() {
+    final text = controller.text.trim();
+    if (text.isEmpty) return;
+
+    final date = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+    Navigator.of(context).pop(NewTodo(text: text, date: date));
+  }
+
+  Future<void> selectDate() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2025),
+    );
+    setState(() {
+      if (date != null) {
+        selectedDate = date;
+      }
+    });
+  }
+
+  Future<void> selectTime() async {
+    final time = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    setState(() {
+      if (time != null) {
+        selectedTime = time;
+      }
+    });
+  }
+}
+
+class TimePreview extends StatelessWidget {
+  const TimePreview({
+    Key? key,
+    required this.selectedTime,
+  }) : super(key: key);
+
+  final TimeOfDay selectedTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$selectedTime');
+  }
+}
+
+class DatePreview extends StatelessWidget {
+  const DatePreview({
+    Key? key,
+    required this.selectedDate,
+  }) : super(key: key);
+
+  final DateTime selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$selectedDate'.split(' ')[0]);
   }
 }

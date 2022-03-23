@@ -6,6 +6,6 @@ class NewTodo {
 
   @override
   String toString() {
-    return 'Todo("$text", "$date")';
+    return 'NewTodo("$text", "$date")';
   }
 }

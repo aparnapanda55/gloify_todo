@@ -20,6 +20,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class NewTodo {
+  final String text;
+  final DateTime date;
+
+  NewTodo({required this.text, required this.date});
+
+  @override
+  String toString() {
+    return 'Todo("$text", "$date")';
+  }
+}
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -41,7 +53,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final todo = await showDialog<String>(
+          final todo = await showDialog<NewTodo?>(
             context: context,
             builder: (context) => const CreateTodoDialog(),
           );
@@ -63,10 +75,14 @@ class CreateTodoDialog extends StatefulWidget {
 
 class _CreateTodoDialogState extends State<CreateTodoDialog> {
   late final TextEditingController controller;
+  late DateTime selectedDate;
+  late TimeOfDay selectedTime;
 
   @override
   void initState() {
     controller = TextEditingController();
+    selectedDate = DateTime.now();
+    selectedTime = TimeOfDay.now();
     super.initState();
   }
 
@@ -80,9 +96,48 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Task'),
-      content: TextField(
-        controller: controller,
-        decoration: const InputDecoration(hintText: 'Enter task'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: controller,
+            decoration: const InputDecoration(hintText: 'Enter task'),
+          ),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2025),
+                  );
+                  setState(() {
+                    if (date != null) {
+                      selectedDate = date;
+                    }
+                  });
+                },
+                child: Text('$selectedDate'.split(' ')[0]),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: selectedTime,
+                  );
+                  setState(() {
+                    if (time != null) {
+                      selectedTime = time;
+                    }
+                  });
+                },
+                child: Text('$selectedTime'),
+              ),
+            ],
+          )
+        ],
       ),
       actions: [
         ElevatedButton(
@@ -93,8 +148,18 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            final todo = controller.text.trim();
-            Navigator.of(context).pop(todo);
+            final text = controller.text.trim();
+            if (text.isEmpty) return;
+
+            final date = DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            );
+
+            Navigator.of(context).pop(NewTodo(text: text, date: date));
           },
           child: const Text('Save'),
         ),

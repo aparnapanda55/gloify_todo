@@ -16,4 +16,4 @@ The web version can be seen [here](https://gloify-todo.web.app) and has all the 
 
 ## Preview
 
-https://drive.google.com/file/d/1_g1emO-BkP_ehTtr8CvU8zHrv0e7CEMY/view?usp=sharing
+<iframe src="https://drive.google.com/file/d/1_g1emO-BkP_ehTtr8CvU8zHrv0e7CEMY/preview" width="640" height="480" allow="autoplay"></iframe>

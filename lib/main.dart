@@ -53,7 +53,9 @@ class MyHomePage extends StatelessWidget {
             context: context,
             builder: (context) => const CreateTodoDialog(),
           );
-          if (todo != null) {}
+          if (todo != null) {
+            _collection.add(todo.toFirestoreDoc());
+          }
         },
         child: const Icon(Icons.add),
       ),

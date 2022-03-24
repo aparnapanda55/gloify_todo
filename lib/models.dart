@@ -35,3 +35,16 @@ class Todo {
   String get date => dateTime.toString().split(' ')[0];
   String get time => DateFormat.jm().format(dateTime);
 }
+
+List<MapEntry<String, List<Todo>>> groupTodosByDate(List<Todo> todos) {
+  final result = <String, List<Todo>>{};
+  for (final todo in todos) {
+    if (!result.containsKey(todo.date)) {
+      result[todo.date] = [];
+    }
+    result[todo.date]!.add(todo);
+  }
+  final entries = result.entries.toList();
+  entries.sort((a, b) => -a.key.compareTo(b.key));
+  return entries;
+}

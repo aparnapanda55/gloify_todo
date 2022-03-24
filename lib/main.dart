@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: AuthGate(),
+      home: MyHomePage(),
     );
   }
 }
@@ -69,25 +69,25 @@ class MyHomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           PopupMenuButton(
-              icon: const Icon(Icons.menu),
-              itemBuilder: ((context) => [
-                    PopupMenuItem(
-                      child: Row(
-                        children: const [
-                          Text('Sign out'),
-                          Spacer(),
-                          Icon(
-                            Icons.logout,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        FirebaseAuth.instance.signOut();
-                      },
+            icon: const Icon(Icons.menu),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Row(
+                  children: const [
+                    Text('Sign out'),
+                    Spacer(),
+                    Icon(
+                      Icons.logout,
+                      color: Colors.black,
                     ),
-                  ]))
-          //
+                  ],
+                ),
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                },
+              ),
+            ],
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -113,26 +113,24 @@ class MyHomePage extends StatelessWidget {
             );
           }
 
-          final todos =
-              snapshot.data!.docs.map((doc) => Todo.fromFirestoreDoc(doc));
+          final todos = snapshot.data!.docs
+              .map((doc) => Todo.fromFirestoreDoc(doc))
+              .toList();
+
+          final grouped = groupTodosByDate(todos);
+
           return ListView(
-            children: todos.map((todo) {
+            children: grouped.map((entry) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(todo.text),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(todo.time),
-                      Checkbox(
-                        value: todo.isDone,
-                        onChanged: (value) {
-                          _collection.doc(todo.id).update({'isDone': value});
-                        },
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    Text(entry.key),
+                    Column(
+                      children:
+                          entry.value.map((todo) => Text('$todo')).toList(),
+                    ),
+                  ],
                 ),
               );
             }).toList(),
@@ -142,3 +140,20 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+
+// ListTile(
+//                   title: Text(todo.text),
+//                   trailing: Row(
+//                     mainAxisSize: MainAxisSize.min,
+//                     children: [
+//                       Text(todo.time),
+//                       Checkbox(
+//                         value: todo.isDone,
+//                         onChanged: (value) {
+//                           _collection.doc(todo.id).update({'isDone': value});
+//                         },
+//                       ),
+//                     ],
+//                   ),
+//                 )

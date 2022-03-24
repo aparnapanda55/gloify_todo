@@ -117,6 +117,18 @@ class MyHomePage extends StatelessWidget {
               .map((doc) => Todo.fromFirestoreDoc(doc))
               .toList();
 
+          if (todos.isEmpty) {
+            return const Center(
+              child: Text(
+                ' You don\'t have any todos yet',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.grey),
+              ),
+            );
+          }
+
           final groups = groupTodosByDate(todos);
 
           return ListView(

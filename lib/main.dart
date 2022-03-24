@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
@@ -145,42 +147,45 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        child: Column(
-                          children: group.todos
-                              .map(
-                                (todo) => ListTile(
-                                  title: Text(
-                                    todo.text,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
+                        child: Opacity(
+                          opacity: group.isDone ? 0.2 : 1,
+                          child: Column(
+                            children: group.todos
+                                .map(
+                                  (todo) => ListTile(
+                                    title: Text(
+                                      todo.text,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          todo.time,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Checkbox(
+                                          hoverColor: Colors.teal,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          value: todo.isDone,
+                                          onChanged: (value) {
+                                            _collection
+                                                .doc(todo.id)
+                                                .update({'isDone': value});
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        todo.time,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Checkbox(
-                                        hoverColor: Colors.teal,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        value: todo.isDone,
-                                        onChanged: (value) {
-                                          _collection
-                                              .doc(todo.id)
-                                              .update({'isDone': value});
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                              .toList(),
+                                )
+                                .toList(),
+                          ),
                         ),
                       ),
                     ),

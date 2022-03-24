@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
@@ -135,44 +133,55 @@ class MyHomePage extends StatelessWidget {
                     ),
                     Card(
                       elevation: 3,
-                      shape: Border(
-                        left: BorderSide(
-                          width: 5,
-                          color: group.color,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 15,
                         ),
-                      ),
-                      child: Column(
-                        children: group.todos
-                            .map(
-                              (todo) => ListTile(
-                                title: Text(
-                                  todo.text,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: group.color,
+                              width: 6,
+                            ),
+                          ),
+                        ),
+                        child: Column(
+                          children: group.todos
+                              .map(
+                                (todo) => ListTile(
+                                  title: Text(
+                                    todo.text,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        todo.time,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Checkbox(
+                                        hoverColor: Colors.teal,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        value: todo.isDone,
+                                        onChanged: (value) {
+                                          _collection
+                                              .doc(todo.id)
+                                              .update({'isDone': value});
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      todo.time,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    Checkbox(
-                                      value: todo.isDone,
-                                      onChanged: (value) {
-                                        _collection
-                                            .doc(todo.id)
-                                            .update({'isDone': value});
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                            .toList(),
+                              )
+                              .toList(),
+                        ),
                       ),
                     ),
                   ],
@@ -185,19 +194,3 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
-// ListTile(
-//                   title: Text(todo.text),
-//                   trailing: Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       Text(todo.time),
-//                       Checkbox(
-//                         value: todo.isDone,
-//                         onChanged: (value) {
-//                           _collection.doc(todo.id).update({'isDone': value});
-//                         },
-//                       ),
-//                     ],
-//                   ),
-//                 )

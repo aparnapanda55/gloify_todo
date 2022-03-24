@@ -48,6 +48,8 @@ class TodoGroup {
   Color get color =>
       Colors.primaries[int.parse('${date.year}${date.month}${date.day}') %
           Colors.primaries.length];
+
+  bool get isDone => todos.every((todo) => todo.isDone);
 }
 
 List<TodoGroup> groupTodosByDate(List<Todo> todos) {

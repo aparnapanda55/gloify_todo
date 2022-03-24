@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: MyHomePage(),
+      home: const AuthGate(),
     );
   }
 }
@@ -60,9 +58,13 @@ class AuthGate extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
-  final _collection = FirebaseFirestore.instance.collection('todos');
+
   @override
   Widget build(BuildContext context) {
+    final _collection = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos');
     return Scaffold(
       appBar: AppBar(
         title: Text('Todo List'.toUpperCase()),

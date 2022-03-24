@@ -3,6 +3,7 @@ import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,64 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const MyHomePage(),
+      home: Data(),
+    );
+  }
+}
+
+class Data extends StatefulWidget {
+  Data({Key? key}) : super(key: key);
+
+  @override
+  State<Data> createState() => _DataState();
+}
+
+class _DataState extends State<Data> {
+  final _todos = FirebaseFirestore.instance.collection('todos').snapshots();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _todos,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              final data = document.data()! as Map<String, dynamic>;
+              bool isDone = data['isDone'];
+
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: Text(data['text']),
+                    subtitle: Text(data['datetime'].toString()),
+                    trailing: Container(
+                      child: Checkbox(
+                        value: isDone,
+                        onChanged: (value) {
+                          setState(() {
+                            isDone = !isDone;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          );
+        },
+      ),
     );
   }
 }

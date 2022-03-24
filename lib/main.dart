@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: Data(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -106,7 +106,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final todo = await showDialog<NewTodo?>(
+          final todo = await showDialog<Todo?>(
             context: context,
             builder: (context) => const CreateTodoDialog(),
           );

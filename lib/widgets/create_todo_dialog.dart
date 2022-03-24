@@ -80,7 +80,7 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
       selectedTime.hour,
       selectedTime.minute,
     );
-    Navigator.of(context).pop(NewTodo(text: text, date: date));
+    Navigator.of(context).pop(Todo(text: text, dateTime: date));
   }
 
   Future<void> selectDate() async {

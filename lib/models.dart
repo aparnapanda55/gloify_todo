@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Todo {
@@ -43,6 +44,10 @@ class TodoGroup {
   TodoGroup({required this.date, required this.todos});
 
   String get heading => DateFormat.yMMMMd('en_US').format(date);
+
+  Color get color =>
+      Colors.primaries[int.parse('${date.year}${date.month}${date.day}') %
+          Colors.primaries.length];
 }
 
 List<TodoGroup> groupTodosByDate(List<Todo> todos) {

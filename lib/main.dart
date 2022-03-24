@@ -138,9 +138,7 @@ class MyHomePage extends StatelessWidget {
                       shape: Border(
                         left: BorderSide(
                           width: 5,
-                          color: Color((math.Random().nextDouble() * 0xFFFFFF)
-                                  .toInt())
-                              .withOpacity(1.0),
+                          color: group.color,
                         ),
                       ),
                       child: Column(
@@ -159,7 +157,8 @@ class MyHomePage extends StatelessWidget {
                                     Text(
                                       todo.time,
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w400),
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                     Checkbox(
                                       value: todo.isDone,

@@ -6,13 +6,13 @@ class Todo {
   final String text;
   final DateTime dateTime;
   final bool isDone;
-  final String? id;
+  String? id;
 
   Todo({
     required this.text,
     required this.dateTime,
     this.isDone = false,
-    this.id = null,
+    this.id,
   });
 
   factory Todo.fromFirestoreDoc(QueryDocumentSnapshot doc) {

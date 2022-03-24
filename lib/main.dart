@@ -50,14 +50,14 @@ class AuthGate extends StatelessWidget {
             ],
           );
         }
-        return MyHomePage();
+        return const MyHomePage();
       },
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +144,7 @@ class MyHomePage extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
                         group.heading,
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ),
                     Card(

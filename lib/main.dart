@@ -60,7 +60,7 @@ class MyHomePage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _collection.snapshots(),
+        stream: _collection.orderBy('datetime', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
@@ -69,9 +69,9 @@ class MyHomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+
           final todos =
               snapshot.data!.docs.map((doc) => Todo.fromFirestoreDoc(doc));
-
           return ListView(
             children: todos.map((todo) {
               return Padding(

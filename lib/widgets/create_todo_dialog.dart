@@ -47,7 +47,7 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
                 onPressed: selectDate,
                 child: DatePreview(selectedDate: selectedDate),
               ),
-              Spacer(),
+              const Spacer(),
               TextButton(
                 onPressed: selectTime,
                 child: TimePreview(selectedTime: selectedTime),
@@ -123,7 +123,7 @@ class TimePreview extends StatelessWidget {
   final TimeOfDay selectedTime;
 
   String formatTimeOfDay(TimeOfDay tod) {
-    final now = new DateTime.now();
+    final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
     final format = DateFormat.jm(); //"6:00 AM"
     return format.format(dt);
@@ -133,7 +133,7 @@ class TimePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       formatTimeOfDay(selectedTime),
-      style: TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20),
     );
   }
 }
@@ -150,7 +150,7 @@ class DatePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$selectedDate'.split(' ')[0],
-      style: TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20),
     );
   }
 }

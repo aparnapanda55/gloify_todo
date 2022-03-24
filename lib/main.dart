@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
@@ -66,13 +68,26 @@ class MyHomePage extends StatelessWidget {
         title: Text('Todo List'.toUpperCase()),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.menu,
-              size: 35,
-            ),
-          ),
+          PopupMenuButton(
+              icon: const Icon(Icons.menu),
+              itemBuilder: ((context) => [
+                    PopupMenuItem(
+                      child: Row(
+                        children: const [
+                          Text('Sign out'),
+                          Spacer(),
+                          Icon(
+                            Icons.logout,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        FirebaseAuth.instance.signOut();
+                      },
+                    ),
+                  ]))
+          //
         ],
       ),
       floatingActionButton: FloatingActionButton(

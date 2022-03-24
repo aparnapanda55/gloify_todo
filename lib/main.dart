@@ -23,24 +23,40 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
 
-class Data extends StatefulWidget {
-  const Data({Key? key}) : super(key: key);
-
-  @override
-  State<Data> createState() => _DataState();
-}
-
-class _DataState extends State<Data> {
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key}) : super(key: key);
   final _collection = FirebaseFirestore.instance.collection('todos');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Todo List'.toUpperCase()),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.menu,
+              size: 35,
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final todo = await showDialog<Todo?>(
+            context: context,
+            builder: (context) => const CreateTodoDialog(),
+          );
+          if (todo != null) {}
+        },
+        child: const Icon(Icons.add),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _collection.snapshots(),
         builder: (context, snapshot) {
@@ -78,40 +94,6 @@ class _DataState extends State<Data> {
           );
         },
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo List'.toUpperCase()),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.menu,
-              size: 35,
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final todo = await showDialog<Todo?>(
-            context: context,
-            builder: (context) => const CreateTodoDialog(),
-          );
-          print(todo);
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: Data(),
     );
   }
 }

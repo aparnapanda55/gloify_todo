@@ -34,12 +34,13 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
       title: const Text('Task'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             controller: controller,
             decoration: const InputDecoration(hintText: 'Enter task'),
           ),
-          SizedBox(height: 10),
+          //Text('Select due date'),
           Row(
             children: [
               TextButton(

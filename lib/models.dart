@@ -32,19 +32,29 @@ class Todo {
     };
   }
 
-  String get date => dateTime.toString().split(' ')[0];
+  DateTime get date => DateTime(dateTime.year, dateTime.month, dateTime.day);
   String get time => DateFormat.jm().format(dateTime);
 }
 
-List<MapEntry<String, List<Todo>>> groupTodosByDate(List<Todo> todos) {
-  final result = <String, List<Todo>>{};
+class TodoGroup {
+  final DateTime date;
+  final List<Todo> todos;
+
+  TodoGroup({required this.date, required this.todos});
+
+  String get heading => DateFormat.yMMMMd('en_US').format(date);
+}
+
+List<TodoGroup> groupTodosByDate(List<Todo> todos) {
+  final result = <DateTime, List<Todo>>{};
   for (final todo in todos) {
-    if (!result.containsKey(todo.date)) {
-      result[todo.date] = [];
+    final key = todo.date;
+    if (!result.containsKey(key)) {
+      result[key] = [];
     }
-    result[todo.date]!.add(todo);
+    result[key]!.add(todo);
   }
   final entries = result.entries.toList();
   entries.sort((a, b) => -a.key.compareTo(b.key));
-  return entries;
+  return entries.map((e) => TodoGroup(date: e.key, todos: e.value)).toList();
 }

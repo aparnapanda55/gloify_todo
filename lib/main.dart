@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'widgets/create_todo_dialog.dart';
@@ -117,18 +117,64 @@ class MyHomePage extends StatelessWidget {
               .map((doc) => Todo.fromFirestoreDoc(doc))
               .toList();
 
-          final grouped = groupTodosByDate(todos);
+          final groups = groupTodosByDate(todos);
 
           return ListView(
-            children: grouped.map((entry) {
+            children: groups.map((group) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(entry.key),
-                    Column(
-                      children:
-                          entry.value.map((todo) => Text('$todo')).toList(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        group.heading,
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      shape: Border(
+                        left: BorderSide(
+                          width: 5,
+                          color: Color((math.Random().nextDouble() * 0xFFFFFF)
+                                  .toInt())
+                              .withOpacity(1.0),
+                        ),
+                      ),
+                      child: Column(
+                        children: group.todos
+                            .map(
+                              (todo) => ListTile(
+                                title: Text(
+                                  todo.text,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      todo.time,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    Checkbox(
+                                      value: todo.isDone,
+                                      onChanged: (value) {
+                                        _collection
+                                            .doc(todo.id)
+                                            .update({'isDone': value});
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ],
                 ),
@@ -140,7 +186,6 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
 
 // ListTile(
 //                   title: Text(todo.text),

@@ -4,6 +4,8 @@ import 'widgets/create_todo_dialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,33 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: MyHomePage(),
+      home: AuthGate(),
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SignInScreen(
+            providerConfigs: [
+              GoogleProviderConfiguration(
+                clientId:
+                    '470642559463-b76b7f5uo0l53g8fkelohopsbmk0vrg6.apps.googleusercontent.com',
+              )
+            ],
+          );
+        }
+        return MyHomePage();
+      },
     );
   }
 }
@@ -95,53 +123,6 @@ class MyHomePage extends StatelessWidget {
             }).toList(),
           );
         },
-      ),
-    );
-  }
-}
-
-class TaskLists extends StatelessWidget {
-  const TaskLists({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Feb 10 2016'),
-          OneDaysTasks(),
-          Text('Jan 18 2016'),
-          OneDaysTasks(),
-        ],
-      ),
-    );
-  }
-}
-
-class OneDaysTasks extends StatelessWidget {
-  const OneDaysTasks({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child: Card(
-        elevation: 5,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: 2,
-          itemBuilder: (context, index) => const ListTile(
-            title: Text('Interview at Google'),
-            trailing: Text('12:90'),
-          ),
-        ),
       ),
     );
   }

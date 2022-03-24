@@ -29,20 +29,20 @@ class MyApp extends StatelessWidget {
 }
 
 class Data extends StatefulWidget {
-  Data({Key? key}) : super(key: key);
+  const Data({Key? key}) : super(key: key);
 
   @override
   State<Data> createState() => _DataState();
 }
 
 class _DataState extends State<Data> {
-  final _todos = FirebaseFirestore.instance.collection('todos').snapshots();
+  final _collection = FirebaseFirestore.instance.collection('todos');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: _todos,
+        stream: _collection.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
@@ -51,29 +51,26 @@ class _DataState extends State<Data> {
               child: CircularProgressIndicator(),
             );
           }
+          final todos =
+              snapshot.data!.docs.map((doc) => Todo.fromFirestoreDoc(doc));
 
           return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              final data = document.data()! as Map<String, dynamic>;
-              bool isDone = data['isDone'];
-
+            children: todos.map((todo) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 5,
-                  child: ListTile(
-                    title: Text(data['text']),
-                    subtitle: Text(data['datetime'].toString()),
-                    trailing: Container(
-                      child: Checkbox(
-                        value: isDone,
+                child: ListTile(
+                  title: Text(todo.text),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(todo.time),
+                      Checkbox(
+                        value: todo.isDone,
                         onChanged: (value) {
-                          setState(() {
-                            isDone = !isDone;
-                          });
+                          _collection.doc(todo.id).update({'isDone': value});
                         },
                       ),
-                    ),
+                    ],
                   ),
                 ),
               );
@@ -114,7 +111,7 @@ class MyHomePage extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: const TaskLists(),
+      body: Data(),
     );
   }
 }

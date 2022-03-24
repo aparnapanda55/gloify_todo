@@ -166,35 +166,41 @@ class MyHomePage extends StatelessWidget {
                           child: Column(
                             children: group.todos
                                 .map(
-                                  (todo) => ListTile(
-                                    title: Text(
-                                      todo.text,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                  (todo) => Dismissible(
+                                    key: ValueKey(todo.id!),
+                                    onDismissed: (direction) {
+                                      _collection.doc(todo.id).delete();
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                        todo.text,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          todo.time,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            todo.time,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        Checkbox(
-                                          hoverColor: Colors.teal,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          value: todo.isDone,
-                                          onChanged: (value) {
-                                            _collection
-                                                .doc(todo.id)
-                                                .update({'isDone': value});
-                                          },
-                                        ),
-                                      ],
+                                          Checkbox(
+                                            hoverColor: Colors.teal,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            value: todo.isDone,
+                                            onChanged: (value) {
+                                              _collection
+                                                  .doc(todo.id)
+                                                  .update({'isDone': value});
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )

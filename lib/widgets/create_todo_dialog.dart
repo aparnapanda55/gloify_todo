@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models.dart';
 
 class CreateTodoDialog extends StatefulWidget {
@@ -38,13 +39,15 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
             controller: controller,
             decoration: const InputDecoration(hintText: 'Enter task'),
           ),
+          SizedBox(height: 10),
           Row(
             children: [
-              ElevatedButton(
+              TextButton(
                 onPressed: selectDate,
                 child: DatePreview(selectedDate: selectedDate),
               ),
-              ElevatedButton(
+              Spacer(),
+              TextButton(
                 onPressed: selectTime,
                 child: TimePreview(selectedTime: selectedTime),
               ),
@@ -118,9 +121,19 @@ class TimePreview extends StatelessWidget {
 
   final TimeOfDay selectedTime;
 
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); //"6:00 AM"
+    return format.format(dt);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Text('$selectedTime');
+    return Text(
+      formatTimeOfDay(selectedTime),
+      style: TextStyle(fontSize: 20),
+    );
   }
 }
 
@@ -134,6 +147,9 @@ class DatePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('$selectedDate'.split(' ')[0]);
+    return Text(
+      '$selectedDate'.split(' ')[0],
+      style: TextStyle(fontSize: 20),
+    );
   }
 }

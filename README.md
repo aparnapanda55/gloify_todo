@@ -15,3 +15,5 @@ The web version can be seen [here](https://gloify-todo.web.app) and has all the 
 > To run the app locally, the debug SHA1 hash needs to be added in the firebase console.
 
 ## Preview
+
+https://drive.google.com/file/d/1_g1emO-BkP_ehTtr8CvU8zHrv0e7CEMY/view?usp=sharing

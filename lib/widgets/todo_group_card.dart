@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../models.dart';
@@ -6,13 +5,14 @@ import '../models.dart';
 class TodoGroupCard extends StatelessWidget {
   const TodoGroupCard({
     Key? key,
+    required this.onTodoDeleted,
+    required this.onTodoUpdated,
     required this.groups,
-    required CollectionReference<Map<String, dynamic>> collection,
-  })  : _collection = collection,
-        super(key: key);
+  }) : super(key: key);
 
   final List<TodoGroup> groups;
-  final CollectionReference<Map<String, dynamic>> _collection;
+  final void Function(Todo) onTodoDeleted;
+  final void Function(Todo, bool) onTodoUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class TodoGroupCard extends StatelessWidget {
                               (todo) => Dismissible(
                                 key: ValueKey(todo.id!),
                                 onDismissed: (direction) {
-                                  _collection.doc(todo.id).delete();
+                                  onTodoDeleted(todo);
                                 },
                                 child: ListTile(
                                   title: Text(
@@ -79,9 +79,7 @@ class TodoGroupCard extends StatelessWidget {
                                                 BorderRadius.circular(10)),
                                         value: todo.isDone,
                                         onChanged: (value) {
-                                          _collection
-                                              .doc(todo.id)
-                                              .update({'isDone': value});
+                                          onTodoUpdated(todo, value ?? false);
                                         },
                                       ),
                                     ],

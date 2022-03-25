@@ -7,7 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,11 +89,9 @@ class MyHomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-
           final todos = snapshot.data!.docs
               .map((doc) => Todo.fromFirestoreDoc(doc))
               .toList();
-
           if (todos.isEmpty) {
             return const Center(
               child: Text(
@@ -106,14 +103,21 @@ class MyHomePage extends StatelessWidget {
               ),
             );
           }
-
           final groups = groupTodosByDate(todos);
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: 600,
               ),
-              child: TodoGroupCard(groups: groups, collection: _collection),
+              child: TodoGroupCard(
+                groups: groups,
+                onTodoUpdated: (Todo todo, bool isDone) {
+                  _collection.doc(todo.id).update({'isDone': isDone});
+                },
+                onTodoDeleted: (Todo todo) {
+                  _collection.doc(todo.id).delete();
+                },
+              ),
             ),
           );
         },

@@ -41,20 +41,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDb1W-n0PQxT8Mos_7CulZxeXzT3eCYIqc',
-    appId: '1:470642559463:web:5c46760079472d4fa49542',
-    messagingSenderId: '470642559463',
-    projectId: 'gliofy-todo',
-    authDomain: 'gliofy-todo.firebaseapp.com',
-    storageBucket: 'gliofy-todo.appspot.com',
-    measurementId: 'G-84L4TNCQCH',
+    apiKey: 'AIzaSyCpYNDvZ-x4rvQ7RhDWs0fZRvoU6PPTkrY',
+    appId: '1:315374225316:web:df9c78a12a43f140106331',
+    messagingSenderId: '315374225316',
+    projectId: 'gloify-todo',
+    authDomain: 'gloify-todo.firebaseapp.com',
+    storageBucket: 'gloify-todo.appspot.com',
+    measurementId: 'G-CWYM54EQ7T',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDf2msYoJaKRWusF4vXqFlxhVnS1feSXvo',
-    appId: '1:470642559463:android:65fca38ecd0b01b6a49542',
-    messagingSenderId: '470642559463',
-    projectId: 'gliofy-todo',
-    storageBucket: 'gliofy-todo.appspot.com',
+    apiKey: 'AIzaSyDSxv24fiUhCd0OwfjKF1mgTK9ebXCq2x0',
+    appId: '1:315374225316:android:089e96d1fee70d5e106331',
+    messagingSenderId: '315374225316',
+    projectId: 'gloify-todo',
+    storageBucket: 'gloify-todo.appspot.com',
   );
 }

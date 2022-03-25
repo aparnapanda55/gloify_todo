@@ -45,7 +45,7 @@ class AuthGate extends StatelessWidget {
             providerConfigs: [
               GoogleProviderConfiguration(
                 clientId:
-                    '470642559463-b76b7f5uo0l53g8fkelohopsbmk0vrg6.apps.googleusercontent.com',
+                    '315374225316-u5ppm0f2vnchdbs10h6tbfh4hbq2kqsu.apps.googleusercontent.com',
               )
             ],
           );
@@ -135,7 +135,7 @@ class MyHomePage extends StatelessWidget {
 
           return Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600),
+              constraints: const BoxConstraints(maxWidth: 600),
               child: ListView(
                 children: groups.map((group) {
                   return Padding(

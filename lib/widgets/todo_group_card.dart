@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models.dart';
+import 'todo_tile.dart';
 
 class TodoGroupCard extends StatelessWidget {
   const TodoGroupCard({
@@ -51,40 +52,10 @@ class TodoGroupCard extends StatelessWidget {
                       child: Column(
                         children: group.todos
                             .map(
-                              (todo) => Dismissible(
-                                key: ValueKey(todo.id!),
-                                onDismissed: (direction) {
-                                  onTodoDeleted(todo);
-                                },
-                                child: ListTile(
-                                  title: Text(
-                                    todo.text,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        todo.time,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Checkbox(
-                                        hoverColor: Colors.teal,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        value: todo.isDone,
-                                        onChanged: (value) {
-                                          onTodoUpdated(todo, value ?? false);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              (todo) => TodoTile(
+                                todo: todo,
+                                onTodoDeleted: onTodoDeleted,
+                                onTodoUpdated: onTodoUpdated,
                               ),
                             )
                             .toList(),
